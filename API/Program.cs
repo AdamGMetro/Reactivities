@@ -14,6 +14,16 @@ builder.Services.AddDbContext<DataContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//cors policy: we don't care about header or method as long as it comes from our local origin 
+builder.Services.AddCors(opt => {
+    opt.AddPolicy("CorsPolicy", policy => 
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    });
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,11 +33,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-using var scope = app.Services.CreateScope(); //using clean up the memeory as soon as execution is finished
+using var scope = app.Services.CreateScope(); //using clean up the memeory as soon as execution is finished // this is for a-fish-in-sea 
 var services = scope.ServiceProvider;
 try
 {
