@@ -1,3 +1,4 @@
+
 namespace Domain
 {
     public class Activity
@@ -15,5 +16,10 @@ namespace Domain
         public string City { get; set; }
 
         public string Venue { get; set; }
+
+        public static implicit operator System.Diagnostics.Activity(Activity v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
