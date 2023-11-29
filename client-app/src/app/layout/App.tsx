@@ -1,33 +1,26 @@
-import { useEffect} from 'react'
-import {  Container } from 'semantic-ui-react';
-import NavBar from './NavBar';
-import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
-import LoadingComponent from './LoadingComponents';
-import { useStore } from '../stores/store';
-import { observer } from 'mobx-react-lite';
-
+import { Container } from "semantic-ui-react";
+import NavBar from "./NavBar";
+import { observer } from "mobx-react-lite";
+import { Outlet, useLocation } from "react-router-dom";
+import HomePage from "../../features/activities/home/HomePage";
 
 function App() {
-  const { activityStore } = useStore(); 
+  const location = useLocation();
 
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore])//dependacies for useEffect empty array executes once and only once with the empty deps array([])
-
-  
-
-
-  if (activityStore.loadingInitial) return <LoadingComponent content='Hey, chill bro!' />
   return (
     <>
-      <NavBar />
-      <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard/>
-      </Container>
-
+      {location.pathname == "/" ? (
+        <HomePage />
+      ) : (
+        <>
+          <NavBar />
+          <Container style={{ marginTop: "7em" }}>
+            <Outlet />
+          </Container>
+        </>
+      )}
     </>
-
-  )
+  );
 }
 
 export default observer(App);
